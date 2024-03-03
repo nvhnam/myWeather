@@ -6,17 +6,20 @@ const KEY = "520559273579e01aba0b4394c5c9fe61";
 function App() {
   const [search, setSearch] = useState("London");
   const [result, setResult] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(
     function () {
       const controller = new AbortController();
       async function getWeather() {
+        setIsLoading(true);
         const res = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?q=${search}&appid=${KEY}&units=metric`,
           { signal: controller.signal }
         );
         const data = await res.json();
         setResult(data);
+        setIsLoading(false);
       }
 
       getWeather();
@@ -28,21 +31,47 @@ function App() {
     [search]
   );
 
+  useEffect(
+    function () {
+      if (!search || result.cod === "404") return;
+      document.title = `${result.name} | Weather`;
+
+      return function () {
+        document.title = "myWeather";
+      };
+    },
+    [search, result]
+  );
+
   return (
     <div className="container">
       <div className="wrapper">
         <SearchBar onSearch={setSearch} search={search} />
-        <MainSection>
-          <CountryInfo result={result} />
-          <WeatherInfo result={result} />
-        </MainSection>
-        <Footer result={result} search={search} />
+        {!search.length && <Welcome />}
+        {isLoading || (result.cod === "404" && <Loader />)}
+        {!isLoading && result.cod === 200 && (
+          <>
+            <MainSection>
+              <CountryInfo result={result} />
+              <WeatherInfo result={result} />
+            </MainSection>
+            <Footer result={result} search={search} />
+          </>
+        )}
       </div>
     </div>
   );
 }
 
 export default App;
+
+function Welcome() {
+  return <div className="welcome">Daily weather forecast ☀️</div>;
+}
+
+function Loader() {
+  return <div className="loader">Loading...</div>;
+}
 
 function SearchBar({ onSearch, search }) {
   useEffect(

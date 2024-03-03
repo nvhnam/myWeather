@@ -31,6 +31,22 @@
   background-color: rgb(61, 155, 166);
 }
 
+.loader {
+  text-align: center;
+  color: white;
+  font-size: 30px;
+  transition: 0.5s ease-in;
+  margin-top: 50px;
+}
+
+.welcome {
+  text-align: center;
+  color: white;
+  font-size: 30px;
+  transition: 0.5s ease-in;
+  margin-top: 50px;
+}
+
 .searchContainer {
   position: relative;
   margin-top: 20px;
@@ -62,6 +78,7 @@
   width: 70%;
   height: 60%;
   text-align: center;
+  transition: 0.5s ease-in-out;
 }
 
 .countryInfo {

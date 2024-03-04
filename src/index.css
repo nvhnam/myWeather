@@ -46,17 +46,22 @@
   margin-top: 50px;
 }
 
-.searchContainer {
-  position: relative;
-  margin-top: 20px;
+.search {
   width: 70%;
+}
+
+.searchContainer {
+  margin-top: 20px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  gap: 20px;
 }
 
 .searchContainer input {
-  width: 100%;
+  width: 80%;
   border-radius: 10px;
   padding: 15px;
   outline: none;
@@ -67,9 +72,21 @@
 .searchContainer span {
   position: absolute;
   font-size: 19px;
-  right: 5px;
+  right: 120px;
   top: 12px;
   cursor: pointer;
+}
+
+.searchContainer button {
+  outline: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 16px;
+  border: none;
+  padding: 13px;
+  font-weight: bold;
+  width: 20%;
+  text-align: center;
 }
 
 .mainSection {
@@ -182,10 +199,13 @@
     font-size: 16px;
   }
 
-  .searchContainer {
-    margin-top: 20px;
+  .search {
     width: 90%;
     max-width: 400px;
+  }
+
+  .searchContainer {
+    margin-top: 20px;
   }
 
   .searchContainer input {
@@ -195,7 +215,14 @@
 
   .searchContainer span {
     font-size: 17px;
-    top: 6px;
+    top: 5px;
+    right: 107px;
+  }
+
+  .searchContainer button {
+    font-size: 13px;
+    padding: 8px;
+    width: 20%;
   }
 
   .mainSection {
@@ -233,7 +260,7 @@
 
   .weatherStatistics p {
     font-size: 21px;
-    letter-spacing: -3px;
+    letter-spacing: 0;
   }
 
   .footer {
@@ -255,5 +282,74 @@
   .weatherBox h3 {
     font-size: 17px;
     margin-top: -3px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .wrapper {
+    gap: 35px;
+    padding: 20px;
+  }
+
+  .search {
+    width: 85%;
+  }
+
+  .searchContainer {
+    margin-top: 0;
+    gap: 11px;
+  }
+
+  .searchContainer span {
+    font-size: 15px;
+    top: 7px;
+    right: 75px;
+  }
+
+  .searchContainer button {
+    font-size: 10px;
+    padding: 7px;
+    width: 26%;
+  }
+
+  .mainSection {
+    width: 100%;
+  }
+
+  .weatherIcon img {
+    width: 150px;
+    height: 140px;
+  }
+
+  .weatherStatistics li {
+    padding: 10px 0;
+    text-align: left;
+  }
+
+  .weatherStatistics span {
+    font-size: 20px;
+    margin-right: 13px;
+  }
+
+  .weatherStatistics p {
+    font-size: 17px;
+    letter-spacing: 0;
+  }
+
+  .footer {
+    gap: 0;
+  }
+
+  .weatherBox {
+    margin-bottom: 10px;
+  }
+
+  .weatherBox p {
+    margin-top: -12px;
+    font-size: 12px;
+  }
+
+  .weatherBox h3 {
+    font-size: 15px;
   }
 }

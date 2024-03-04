@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { useLocation } from "./useLocation";
 
 const KEY = "520559273579e01aba0b4394c5c9fe61";
 
@@ -7,6 +8,12 @@ function App() {
   const [search, setSearch] = useState("London");
   const [result, setResult] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    position: { long, lat },
+    // isFindingCurrentLocation,
+    getPosition,
+    setPosition,
+  } = useLocation();
 
   useEffect(
     function () {
@@ -33,8 +40,29 @@ function App() {
 
   useEffect(
     function () {
+      if (!lat || !long) return;
+      async function getLocation() {
+        setIsLoading(false);
+        const res = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${KEY}`
+        );
+        const data = await res.json();
+        setIsLoading(false);
+        setSearch(data?.name);
+      }
+      getLocation();
+      return function () {
+        setPosition({});
+      };
+    },
+
+    [lat, long, setPosition, getPosition]
+  );
+
+  useEffect(
+    function () {
       if (!search || result.cod === "404") return;
-      document.title = `${result.name} | Weather`;
+      document.title = `${result?.name} | Weather`;
 
       return function () {
         document.title = "myWeather";
@@ -46,7 +74,18 @@ function App() {
   return (
     <div className="container">
       <div className="wrapper">
-        <SearchBar onSearch={setSearch} search={search} />
+        <SearchBar>
+          <div className="searchContainer">
+            <input
+              type="text"
+              placeholder="Enter your city"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <span>🔎</span>
+            <button onClick={() => getPosition()}>Live📍</button>
+          </div>
+        </SearchBar>
         {!search.length && <Welcome />}
         {isLoading || (result.cod === "404" && <Loader />)}
         {!isLoading && result.cod === 200 && (
@@ -73,34 +112,8 @@ function Loader() {
   return <div className="loader">Loading...</div>;
 }
 
-function SearchBar({ onSearch, search }) {
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Enter") {
-          onSearch(search);
-        }
-      }
-      document.addEventListener("keydown", callback);
-
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onSearch, search]
-  );
-
-  return (
-    <div className="searchContainer">
-      <input
-        type="text"
-        placeholder="Enter your city"
-        value={search}
-        onChange={(e) => onSearch(e.target.value)}
-      />
-      <span>🔎</span>
-    </div>
-  );
+function SearchBar({ children }) {
+  return <div className="search">{children}</div>;
 }
 
 function MainSection({ children }) {
